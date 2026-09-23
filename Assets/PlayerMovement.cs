@@ -38,6 +38,8 @@ public class PlayerMovement : MonoBehaviour
 
         controls.Player.Vertical.performed += OnVertical;
         controls.Player.Vertical.canceled += OnVertical;
+
+        controls.Player.SwitchTarget.performed += OnSwitchTarget;
     }
 
     private void OnDisable()
@@ -51,7 +53,17 @@ public class PlayerMovement : MonoBehaviour
         controls.Player.Vertical.performed -= OnVertical;
         controls.Player.Vertical.canceled -= OnVertical;
 
+        controls.Player.SwitchTarget.performed -= OnSwitchTarget;
+
         controls.Player.Disable();
+    }
+
+    // Event yang dilempar keluar, supaya script lain (kamera) bisa subscribe
+    public event System.Action OnSwitchTargetPressed;
+
+    private void OnSwitchTarget(InputAction.CallbackContext context)
+    {
+        OnSwitchTargetPressed?.Invoke();
     }
 
     private void OnMove(InputAction.CallbackContext context)
